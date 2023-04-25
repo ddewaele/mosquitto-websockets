@@ -6,10 +6,10 @@ services:
     container_name: mosquitto
     volumes:
       - ./mosquitto-config/mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - ../letsencrypt/fullchain.pem:/mosquitto/certs/cert.pem
-      - ../letsencrypt/privkey.pem:/mosquitto/certs/key.pem
-      # - ./certs/cert.pem:/mosquitto/certs/cert.pem
-      # - ./certs/key.pem:/mosquitto/certs/key.pem
+      # - ../letsencrypt/fullchain.pem:/mosquitto/certs/cert.pem
+      # - ../letsencrypt/privkey.pem:/mosquitto/certs/key.pem
+      - ./certs/cert.pem:/mosquitto/certs/cert.pem
+      - ./certs/key.pem:/mosquitto/certs/key.pem
 
     ports:
       - 1883:1883
@@ -23,8 +23,8 @@ services:
       - "443:443"
     volumes:
       - ./nginx:/etc/nginx/conf.d
-      - ../letsencrypt/fullchain.pem:/etc/certs/cert.pem
-      - ../letsencrypt/privkey.pem:/etc/certs/key.pem
-      # - ./certs/cert.pem:/etc/certs/cert.pem
-      # - ./certs/key.pem:/etc/certs/key.pem
+      # - ../letsencrypt/fullchain.pem:/etc/certs/cert.pem
+      # - ../letsencrypt/privkey.pem:/etc/certs/key.pem
+      - ./certs/cert.pem:/etc/certs/cert.pem
+      - ./certs/key.pem:/etc/certs/key.pem
       - ./html:/usr/share/nginx/html

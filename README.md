@@ -14,11 +14,11 @@ A public resolvable DNS Name `mqtt.my-tst-playground.com` is also available poin
 
 The ports used in this example: 
 
-1883 : MQTT, unencrypted
-8883 : MQTT, encrypted
-8884 : MQTT, encrypted, client certificate required
-8080 : MQTT over WebSockets, unencrypted
-8081 : MQTT over WebSockets, encrypted
+- 1883 : MQTT, unencrypted
+- 8883 : MQTT, encrypted
+- 8884 : MQTT, encrypted, client certificate required
+- 8080 : MQTT over WebSockets, unencrypted
+- 8081 : MQTT over WebSockets, encrypted
 
 The websocket ports aren't really standadised. Some use 9001, 8884, ....
 
@@ -66,11 +66,13 @@ docker-compose exec -ti mosquitto mosquitto_sub -d -t "/poc/test"
 
 ## Self signed certificates SSL
 
+Issue the following commands to generate self signed certificates.
+
+```
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/C=US/O=Nginx/OU=Nginx Github Test/CN=my-tst-playground.com"
 
-openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
 openssl pkcs12 -export -in cert.crt -inkey key.pem -out cert_key.pfx
-
+```
 
 ## Javascript / Node libraries
 
@@ -132,14 +134,39 @@ It will actually fail on the websocket connection
 
 ## Screenshots
 
-[](./images/browser-connection-not-private.png)
-[](./images/browser-connection-proceed.png)
-[](./images/browser-mqtt-connected.png)
-[](./images/browser-connection-continued-not-secure.png)
-[](./images/certificate-details.png)
-[](./images/console-error-ERR_CERT_AUTHORITY_INVALID.png)
-[](./images/console-error-ERR_CERT_AUTHORITY_INVALID2.png)
-[](./images/console-ok-webclient-messages.png)
-[](./images/console-ok-webclient.png)
-[](./images/hivemq-client.png)
+When you access an https site with an invalid certifcate (invalid CA / invalid CN) you get a warning in Chrome.
+
+![](./images/browser-connection-not-private.png)
+
+You are also given the option to proceed
+
+![](./images/browser-connection-proceed.png)
+
+After that you can see the website but with a "Not Secure" warning
+This is the only way to let the broser "accept" this certificate and only work when you enter the https in the address bar. 
+This does not work for websockets.
+
+![](./images/browser-connection-continued-not-secure.png)
+
+You can view the certificate
+
+![](./images/certificate-details.png)
+
+Because you accepted the certificate the webapp is able to make the secure websocket connection
+
+![](./images/browser-mqtt-connected.png)
+
+Otherwise you would get these errors :
+
+![](./images/console-error-ERR_CERT_AUTHORITY_INVALID.png)
+![](./images/console-error-ERR_CERT_AUTHORITY_INVALID2.png)
+
+But you will be able to send messages now.
+
+![](./images/console-ok-webclient-messages.png)
+![](./images/console-ok-webclient.png)
+
+
+## HiveMQ External MQTT web based client.
+![](./images/hivemq-client.png)
 
